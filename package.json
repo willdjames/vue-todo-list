@@ -1,0 +1,20 @@
+{
+  "name": "vue-todo-list",
+  "version": "1.0.0",
+  "description": "App de tarefas com vuejs lib",
+  "main": "index.js",
+  "scripts": {
+    "start": "./node_modules/.bin/http-server -a 127.0.0.1 -p 8080 -c-1",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "cypress:open": "cypress open"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "http-server": "^0.12.3"
+  },
+  "devDependencies": {
+    "cypress": "^6.8.0"
+  }
+}

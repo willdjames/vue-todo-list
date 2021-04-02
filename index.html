@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" 
+    href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" 
+    integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" 
+    crossorigin="anonymous">
+
+    <!-- Font AWESOME -->
+    <link href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" rel="stylesheet"/>
+
+    <style>
+        body {
+            background-color: #c1c7c7
+        }
+    </style>
+
+    <title>Tarefas</title>
+  </head>
+  <body>
+      <div id="app">
+        <div class="container mt-3">
+            <h4>{{ hoje }}</h4>
+            
+            <hr/>
+
+            <form>
+                <div class="input-group mb-4">
+                    <input v-model="desc_tarefa" type="text" class="form-control nova-terafa" placeholder="Nova tarefa" aria-label="Nova tarefa" aria-describedby="button-addon2">
+                    <button v-on:click="adiciona" class="btn btn-success" type="button" id="button-addon2">Adiciona</button>
+                </div>
+            </form>
+
+            <div class="d-grid gap-2 d-md-flex justify-content-md-start mb-3">
+                <button v-on:click="limpaLista" class="btn btn-danger btn-sm" type="button" id="button-addon3">Limpa lista</button>
+            </div>
+
+            <div v-if="!tarefas.length" class="sem-atividade text-center">Sem atividades por hoje!</div>
+
+            <ul class="list-group" v-for="(tarefa, index) in tarefas">
+                <li v-bind:class="{'text-decoration-line-through': tarefa.isFeito}" class="list-group-item" aria-current="true">
+                    <div class="row">
+                        <div class="col-1">
+                            <!--a v-on:click.prevent="feito(index)" href="#"><i class="far fa-square"></i></a-->
+                        </div>
+                        <div v-on:click.prevent="feito(index)" class="col-10">
+                            <span>{{ tarefa.desc }}</span>
+                        </div>
+                        <div class="col-1">
+                            <a v-on:click.prevent="excluir(index)" href="#"><i class="fas fa-trash"></i></a>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+
+        </div>
+      </div>
+    
+    <!-- Optional JavaScript; choose one of the two! -->
+
+    <!-- Option 1: Bootstrap Bundle with Popper -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" 
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" 
+    crossorigin="anonymous"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" 
+    integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" 
+    crossorigin="anonymous"></script>
+
+    <!-- versão de desenvolvimento, inclui avisos úteis no console  -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    
+    <script>
+        
+        new Vue({
+            el: '#app',
+
+            data() {
+                return {
+                    tarefas: [],
+                    desc_tarefa: '',
+                    hoje: new Date()
+                }
+            },
+
+            methods: {
+                adiciona(){
+                    if(this.desc_tarefa.trim() == ''){
+                        return;
+                    }
+                    this.tarefas.push({desc: this.desc_tarefa.trim(), isFeito: false});
+                    this.desc_tarefa = '';
+                },
+                excluir(index){
+                    this.tarefas.splice(index, 1);
+                },
+                feito(index){
+                    const isFeito = this.tarefas[index].isFeito;
+                    this.tarefas[index].isFeito = !isFeito;
+                },
+                limpaLista(){ this.tarefas = [] }
+            },
+
+            watch: {
+                tarefas: {
+                    handler: function (val, oldval) {
+                        localStorage.setItem('tarefas_todo', JSON.stringify(this.tarefas))
+                    },
+                    deep: true
+                }                
+            },
+            
+            mounted: function(){
+                tarefas_localstorage = localStorage.getItem('tarefas_todo')
+                if(tarefas_localstorage){
+                    this.tarefas = JSON.parse(tarefas_localstorage)
+                }
+            }
+        });
+    </script>
+
+  </body>
+</html>
