@@ -11,8 +11,8 @@ jobs:
         with:
           fetch-depth: 0
       - name: Instalando dependencias
-      - run: npm i
+        run: npm i
       - name: Subindo aplicacao
-      - run: npm run start &
+        run: npm run start &
       - name: Rodando testes e2e com Cypress
-      - run: npm run cypress:run
+        run: npm run cypress:run
