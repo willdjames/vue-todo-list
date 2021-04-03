@@ -16,7 +16,11 @@
 
     <style>
         body {
-            background-color: #c1c7c7
+            background-color: #c1c7c7;
+        }
+
+        .tarefa-feita {
+            text-decoration: line-through;
         }
     </style>
 
@@ -43,12 +47,12 @@
             <div v-if="!tarefas.length" class="sem-atividade text-center">Sem atividades por hoje!</div>
 
             <ul class="list-group" v-for="(tarefa, index) in tarefas">
-                <li v-bind:class="{'text-decoration-line-through': tarefa.isFeito}" class="list-group-item" aria-current="true">
+                <li v-on:click.prevent="feito(index)" v-bind:class="{'tarefa-feita': tarefa.isFeito}" class="list-group-item" aria-current="true">
                     <div class="row">
                         <div class="col-1">
                             <!--a v-on:click.prevent="feito(index)" href="#"><i class="far fa-square"></i></a-->
                         </div>
-                        <div v-on:click.prevent="feito(index)" class="col-10">
+                        <div class="col-10">
                             <span>{{ tarefa.desc }}</span>
                         </div>
                         <div class="col-1">

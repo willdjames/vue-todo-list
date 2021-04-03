@@ -1,5 +1,10 @@
 describe('Comportamentos do app', () => {
 
+    beforeEach(() => {
+        cy.log('Limpando storage');
+        window.localStorage.clear();
+    })
+    
     it ('Deve mostrar tarefas se ao abrir ter tarefas no localstorage', () => {
 
         // DADO        
@@ -71,4 +76,26 @@ describe('Comportamentos do app', () => {
         cy.get('.sem-atividade').should('have.text', 'Sem atividades por hoje!')
         expect(window.localStorage.getItem('tarefas_todo')).to.be.null
     });
+
+    it ('Marca a atividade como feita', () => {
+        
+        // DADO
+        window.localStorage.setItem('tarefas_todo','[{"desc":"tarefa 1 feita","isFeito":false}]')
+        
+        // QUANDO
+        cy.visit('http://127.0.0.1:8080')
+        cy.get('.list-group-item').click()
+
+        // ENTAO
+        cy.get('.list-group-item').should('have.class', 'tarefa-feita')
+
+        setInterval(() => {
+            const tarefa = JSON.parse(window.localStorage.getItem('tarefas_todo'))[0]
+            
+            expect(tarefa['desc'].to.equal('tarefa 1 feita'))
+            expect(tarefa['isFeito']).to.be.true
+        }, 1000);
+    });
+
+    //TODO teste para excluir tarefa da lista
 });
