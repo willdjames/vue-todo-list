@@ -35,7 +35,8 @@
 
             <form>
                 <div class="input-group mb-4">
-                    <input v-model="desc_tarefa" type="text" class="form-control nova-terafa" placeholder="Nova tarefa" aria-label="Nova tarefa" aria-describedby="button-addon2">
+                    <input v-model="desc_tarefa" type="text" ref="addTarefa" class="form-control nova-terafa focus" 
+                            placeholder="Nova tarefa" aria-label="Nova tarefa" aria-describedby="button-addon2">
                     <button v-on:click="adiciona" class="btn btn-success" type="button" id="button-addon2">Adiciona</button>
                 </div>
             </form>
@@ -45,23 +46,23 @@
             </div>
 
             <div v-if="!tarefas.length" class="sem-atividade text-center">Sem atividades por hoje!</div>
-
-            <ul class="list-group" v-for="(tarefa, index) in tarefas">
-                <li v-on:click.prevent="feito(index)" v-bind:class="{'tarefa-feita': tarefa.isFeito}" class="list-group-item" aria-current="true">
-                    <div class="row">
-                        <div class="col-1">
-                            <!--a v-on:click.prevent="feito(index)" href="#"><i class="far fa-square"></i></a-->
+            <div v-else>
+                <ul class="list-group" v-for="(tarefa, index) in tarefas">
+                    <li v-bind:class="{'tarefa-feita': tarefa.isFeito}" class="list-group-item" aria-current="true">
+                        <div class="row">
+                            <div class="col-1">
+                                <!--a v-on:click.prevent="feito(index)" href="#"><i class="far fa-square"></i></a-->
+                            </div>
+                            <div v-on:click="feito(index)" class="col-10">
+                                <span>{{ tarefa.desc }}</span>
+                            </div>
+                            <div class="col-1">
+                                <a v-on:click.prevent="excluir(index)" href="#"><i class="fas fa-trash"></i></a>
+                            </div>
                         </div>
-                        <div class="col-10">
-                            <span>{{ tarefa.desc }}</span>
-                        </div>
-                        <div class="col-1">
-                            <a v-on:click.prevent="excluir(index)" href="#"><i class="fas fa-trash"></i></a>
-                        </div>
-                    </div>
-                </li>
-            </ul>
-
+                    </li>
+                </ul>
+            </div>
         </div>
       </div>
     
@@ -99,6 +100,7 @@
                     }
                     this.tarefas.push({desc: this.desc_tarefa.trim(), isFeito: false});
                     this.desc_tarefa = '';
+                    this.$refs.addTarefa.focus();
                 },
                 excluir(index){
                     this.tarefas.splice(index, 1);
