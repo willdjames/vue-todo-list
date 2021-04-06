@@ -35,8 +35,12 @@
 
             <form>
                 <div class="input-group mb-4">
-                    <input v-model="desc_tarefa" type="text" ref="addTarefa" class="form-control nova-terafa focus" 
+                    <input v-on:keydown.enter.prevent="adiciona" 
+                            v-model="desc_tarefa" 
+                            type="text" 
+                            ref="addTarefa" class="form-control nova-terafa focus" 
                             placeholder="Nova tarefa" aria-label="Nova tarefa" aria-describedby="button-addon2">
+
                     <button v-on:click="adiciona" class="btn btn-success" type="button" id="button-addon2">Adiciona</button>
                 </div>
             </form>
@@ -85,7 +89,7 @@
         new Vue({
             el: '#app',
 
-            data() {
+            data: function() {
                 return {
                     tarefas: [],
                     desc_tarefa: '',
